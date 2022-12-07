@@ -13,7 +13,6 @@ public class Product {
     private String productDetails;
     private String category;
     private boolean inStock;
-
     @OneToMany
     private List<Ingredient> ingredients;
     private ProductDestination destination;
