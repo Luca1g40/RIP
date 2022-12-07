@@ -16,12 +16,15 @@ public class Product {
 
     @OneToMany
     private List<Ingredient> ingredients;
+    @Enumerated(EnumType.STRING)
     private ProductDestination destination;
     private double prijs;
+    @Enumerated(EnumType.STRING)
     private ProductType productType;
 
 
     public Product() {}
+
 
     public Product(String imagePath, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
         this.imagePath = imagePath;
