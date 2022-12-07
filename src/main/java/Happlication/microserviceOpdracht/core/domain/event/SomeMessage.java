@@ -4,20 +4,20 @@ import java.util.UUID;
 
 public class SomeMessage {
     private Long id;
-    private String content;
+    private String naam;
 
     protected SomeMessage(){}
 
     public SomeMessage(String message){
-        this.id = 2L;
-        this.content = message;
+        this.id = 3L;
+        this.naam = message;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getContent() {
-        return content;
+    public String getNaam() {
+        return naam;
     }
 }

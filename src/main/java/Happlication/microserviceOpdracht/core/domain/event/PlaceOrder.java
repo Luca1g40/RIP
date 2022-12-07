@@ -1,23 +1,32 @@
 package Happlication.microserviceOpdracht.core.domain.event;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 
 public class PlaceOrder {
 
-
-    private String tableId;
+    private Long orderId;
+    private int tableNumber;
+    private List<String> products;
 
     public PlaceOrder() {
     }
 
-    public PlaceOrder(String tableId) {
-        this.tableId = tableId;
+    public PlaceOrder(Long orderId, int tableNumber, List<String> products) {
+        this.orderId = orderId;
+        this.tableNumber = tableNumber;
+        this.products = products;
     }
 
-    public String getTableId() {
-        return tableId;
+
+    public int getTableNumber() {
+        return tableNumber;
     }
 
+    public List<String> getProducts() {
+        return products;
+    }
 
+    public Long getOrderId() {
+        return orderId;
+    }
 }

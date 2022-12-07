@@ -21,4 +21,16 @@ public class ShoppingCart {
         this.id = id;
         this.products = products;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void clearShoppingCart(){
+        products.clear();
+    }
 }

@@ -27,6 +27,10 @@ public class Product {
         this.inStock = inStock;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
     }

@@ -19,4 +19,9 @@ public class Producer{
 
     }
 
+    public void sendOrderToKitchen(PlaceOrder m){
+        this.template.convertAndSend("demo-queue", m);
+    }
+
+
 }

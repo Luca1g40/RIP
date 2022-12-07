@@ -12,7 +12,7 @@ services:
   db:
     build: development/db
     ports:
-      - "25432:5432"
+      - "15432:5432"
     environment:
       - POSTGRES_USER=test-db
       - POSTGRES_PASSWORD=test-db
