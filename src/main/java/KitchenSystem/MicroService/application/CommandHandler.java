@@ -3,7 +3,7 @@ package KitchenSystem.MicroService.application;
 import KitchenSystem.MicroService.application.dto.ProductData;
 import KitchenSystem.MicroService.application.port.ProductRepository;
 import KitchenSystem.MicroService.domain.Product;
-import KitchenSystem.MicroService.domain.event.PlaceProductGuest;
+import KitchenSystem.MicroService.domain.event.PlaceNewProduct;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,19 @@ public class CommandHandler {
     }
 
     public ProductData handle(ProductRequest command) {
-        Product product = new Product(command.imagePath, command.productName, command.productDetails, command.category, command.inStock, command.ingredients, command.destination, command.prijs, command.productType);
+        Product product = new Product(command.productName, command.productDetails, command.category, command.inStock, command.ingredients, command.destination, command.prijs, command.productType);
         productRepository.save(product);
 
-        producer.sendMessageToGuest(new PlaceProductGuest(
+        producer.sendNewProduct(new PlaceNewProduct(
                 product.getId(),
-                product.getImagePath(),
+                product.getProductName(),
                 product.getProductDetails(),
                 product.getCategory(),
-                product.getProductName(),
-                product.getPrijs()
+                product.isInStock(),
+                product.getIngredients(),
+                product.getDestination(),
+                product.getPrijs(),
+                product.getProductType()
         ));
         return createProductData(product);
     }
@@ -38,7 +41,6 @@ public class CommandHandler {
     public ProductData createProductData(Product product) {
         return new ProductData(
                 product.getId(),
-                product.getImagePath(),
                 product.getProductName(),
                 product.getProductDetails(),
                 product.getCategory(),

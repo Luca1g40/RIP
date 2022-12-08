@@ -8,7 +8,6 @@ import java.util.List;
 
 public class ProductData {
     public Long id;
-    public String imagePath;
     public String productName;
     public String productDetails;
     public String category;
@@ -18,9 +17,8 @@ public class ProductData {
     public double prijs;
     public ProductType productType;
 
-    public ProductData(Long id, String imagePath, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
+    public ProductData(Long id, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
         this.id = id;
-        this.imagePath = imagePath;
         this.productName = productName;
         this.productDetails = productDetails;
         this.category = category;

@@ -6,7 +6,7 @@ import KitchenSystem.MicroService.domain.ProductType;
 import java.util.List;
 
 public class ProductRequest {
-    public String imagePath;
+    public Long id;
     public String productName;
     public String productDetails;
     public String category;
@@ -16,8 +16,9 @@ public class ProductRequest {
     public double prijs;
     public ProductType productType;
 
-    public ProductRequest(String imagePath, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
-        this.imagePath = imagePath;
+
+    public ProductRequest(Long id, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
+        this.id = id;
         this.productName = productName;
         this.productDetails = productDetails;
         this.category = category;

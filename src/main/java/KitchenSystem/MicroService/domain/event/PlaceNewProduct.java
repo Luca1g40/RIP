@@ -1,31 +1,27 @@
-package KitchenSystem.MicroService.domain;
+package KitchenSystem.MicroService.domain.event;
 
-import javax.persistence.*;
+
+import KitchenSystem.MicroService.domain.Ingredient;
+import KitchenSystem.MicroService.domain.ProductDestination;
+import KitchenSystem.MicroService.domain.ProductType;
+
 import java.util.List;
 
-@Entity
-public class Product {
-    @Id
-    @GeneratedValue
+public class PlaceNewProduct {
     private Long id;
     private String productName;
     private String productDetails;
     private String category;
     private boolean inStock;
-
-    @OneToMany
     private List<Ingredient> ingredients;
-    @Enumerated(EnumType.STRING)
     private ProductDestination destination;
     private double prijs;
-    @Enumerated(EnumType.STRING)
     private ProductType productType;
 
+    public PlaceNewProduct() {}
 
-    public Product() {}
-
-
-    public Product(String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
+    public PlaceNewProduct(Long id, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
+        this.id = id;
         this.productName = productName;
         this.productDetails = productDetails;
         this.category = category;
@@ -72,3 +68,5 @@ public class Product {
         return productType;
     }
 }
+
+

@@ -1,6 +1,6 @@
 package KitchenSystem.MicroService.infrastructure.driven.messaging;
 
-import KitchenSystem.MicroService.domain.event.PlaceProductGuest;
+import KitchenSystem.MicroService.domain.event.PlaceNewProduct;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +13,9 @@ public class Producer {
         this.template = template;
     }
 
-    public void sendMessageToGuest(PlaceProductGuest product){
-        this.template.convertAndSend("administration-guest-queue", product);
-        System.out.println("product ontvangen " + product.naam);
+    public void sendNewProduct(PlaceNewProduct product){
+        this.template.convertAndSend("product-queue", product);
+        System.out.println("product ontvangen " + product.getProductName());
 
     }
 //
