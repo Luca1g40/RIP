@@ -1,24 +1,30 @@
 package KitchenSystem.MicroService.command;
 
+import java.util.List;
+
 public class PlaceOrder {
+    private long orderId;
+    private int tableNumber;
+    private List<String> products;
 
-    private Long id;
-    private String content;
-
-    public PlaceOrder(Long id, String content) {
-        this.id = id;
-        this.content = content;
-
+    public PlaceOrder(Long orderId, int tableNumber, List<String> products) {
+        this.orderId = orderId;
+        this.tableNumber = tableNumber;
+        this.products = products;
     }
 
     public PlaceOrder() {
     }
 
-    public String getContent() {
-        return content;
+    public int getTableNumber() {
+        return tableNumber;
     }
 
-    public Long getId() {
-        return id;
+    public List<String> getProducts() {
+        return products;
+    }
+
+    public long getOrderId() {
+        return orderId;
     }
 }

@@ -1,20 +1,23 @@
 package KitchenSystem.MicroService.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Entity(name = "tafel")
 public class Table {
     @Id
-    @GeneratedValue
     private Long id;
+    private String naam;
 
-    public Table(Long id) {
+    public Table(Long id, String naam) {
         this.id = id;
+        this.naam = naam;
     }
 
     public Table() {
+    }
+
+    public String getNaam() {
+        return naam;
     }
 
     public Long getId() {
