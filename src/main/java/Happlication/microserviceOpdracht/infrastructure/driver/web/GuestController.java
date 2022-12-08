@@ -4,8 +4,7 @@ import Happlication.microserviceOpdracht.core.application.CommandHandler;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.domain.Order;
 import Happlication.microserviceOpdracht.core.domain.Product;
-import Happlication.microserviceOpdracht.core.domain.event.PlaceOrder;
-import Happlication.microserviceOpdracht.infrastructure.driver.web.request.OrderRequest;
+import Happlication.microserviceOpdracht.infrastructure.driver.web.request.OrderCreated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +30,6 @@ public class GuestController {
         for (Product product: productRepository.findAll()){
             productNames.add(product.getProductName());
         }
-        return this.commandHandler.handle(new OrderRequest(1, productNames));
+        return this.commandHandler.handle(new OrderCreated(1, productNames));
     }
 }

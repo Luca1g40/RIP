@@ -1,7 +1,6 @@
 package Happlication.microserviceOpdracht.infrastructure.driven.messaging;
 
 import Happlication.microserviceOpdracht.core.domain.event.PlaceOrder;
-import Happlication.microserviceOpdracht.core.domain.event.SomeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +13,8 @@ public class Producer{
         this.template = template;
     }
 
-    public void sendMessageToDemo(SomeMessage m){
-        this.template.convertAndSend("demo-queue", m);
-
-    }
-
     public void sendOrderToKitchen(PlaceOrder m){
-        this.template.convertAndSend("demo-queue", m);
+        this.template.convertAndSend("place-order-queue", m);
     }
 
 
