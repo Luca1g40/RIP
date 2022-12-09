@@ -2,15 +2,12 @@ package Happlication.microserviceOpdracht.infrastructure.driver.web;
 
 import Happlication.microserviceOpdracht.core.application.CommandHandler;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
+import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
 import Happlication.microserviceOpdracht.core.domain.Order;
-import Happlication.microserviceOpdracht.core.domain.Product;
-import Happlication.microserviceOpdracht.infrastructure.driver.web.request.OrderCreated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
+import Happlication.microserviceOpdracht.infrastructure.driver.web.request.ProductRequest;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/guest")
@@ -24,12 +21,14 @@ public class GuestController {
         this.productRepository = productRepository;
     }
 
-    @PostMapping("/order")
-    public Order placeOrder(){
-        List<String> productNames = new ArrayList<>();
-        for (Product product: productRepository.findAll()){
-            productNames.add(product.getProductName());
-        }
-        return this.commandHandler.handle(new OrderCreated(1, productNames));
+    @PostMapping("/order/{id}")
+    public Order placeOrder(@PathVariable Long id){
+        return this.commandHandler.handle(new OrderCreatedEvent(id));
     }
+
+    @PostMapping("/addproduct/{id}")
+    public void addShoppingCart(@PathVariable Long id, @RequestBody ProductRequest productRequest){
+        this.commandHandler.handle(new AddToShoppingCart(id, productRequest.name));
+    }
+
 }

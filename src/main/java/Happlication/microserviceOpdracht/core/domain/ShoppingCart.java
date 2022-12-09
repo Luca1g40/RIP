@@ -1,9 +1,6 @@
 package Happlication.microserviceOpdracht.core.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -11,13 +8,13 @@ public class ShoppingCart {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToMany
-    private List<Product> products;
+    @ElementCollection
+    private List<String> products;
 
     public ShoppingCart() {
     }
 
-    public ShoppingCart(Long id, List<Product> products) {
+    public ShoppingCart(Long id, List<String> products) {
         this.id = id;
         this.products = products;
     }
@@ -26,8 +23,12 @@ public class ShoppingCart {
         return id;
     }
 
-    public List<Product> getProducts() {
+    public List<String> getProducts() {
         return products;
+    }
+
+    public void addProductToShoppingCart(String product){
+        this.products.add(product);
     }
 
     public void clearShoppingCart(){

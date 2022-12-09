@@ -13,7 +13,7 @@ public class Producer{
     }
 
     public void sendOrderToKitchen(GenericEvent m){
-        this.template.convertAndSend("order-queue", m);
+        this.template.convertAndSend("order-exchange", "", m);
     }
 
 

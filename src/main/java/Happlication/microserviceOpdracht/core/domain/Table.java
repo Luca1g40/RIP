@@ -1,5 +1,7 @@
 package Happlication.microserviceOpdracht.core.domain;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public class Table {
     private int tableNumber;
     @OneToOne
     private ShoppingCart shoppingCart;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders;
 
 
@@ -26,19 +28,49 @@ public class Table {
         this.orders = orders;
     }
 
-    public void placeOrders(){
-        List<String> productNames = new ArrayList<>();
-        for (Product product:shoppingCart.getProducts()){
-            productNames.add(product.getProductName());
+    public void placeOrder(){
+        Order order = new Order(this.tableNumber, new ArrayList<>());
+
+        for (String product : shoppingCart.getProducts()){
+            order.addProducts(product);
         }
 
-        Order order = new Order(this.tableNumber, productNames);
         addOrders(order);
+
         shoppingCart.clearShoppingCart();
+    }
+
+    public void addToShoppingCart(String product){
+        this.shoppingCart.addProductToShoppingCart(product);
     }
 
     public void addOrders(Order order){
         orders.add(order);
     }
 
+    public Long getTableId() {
+        return tableId;
+    }
+
+    public int getTableNumber() {
+        return tableNumber;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "tableId=" + tableId +
+                ", tableNumber=" + tableNumber +
+                ", shoppingCart=" + shoppingCart +
+                ", orders=" + orders +
+                '}';
+    }
 }

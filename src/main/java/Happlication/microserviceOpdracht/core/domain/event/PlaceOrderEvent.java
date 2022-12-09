@@ -2,16 +2,16 @@ package Happlication.microserviceOpdracht.core.domain.event;
 
 import java.util.List;
 
-public class PlaceOrder {
+public class PlaceOrderEvent {
 
     private Long orderId;
     private int tableNumber;
     private List<String> products;
 
-    public PlaceOrder() {
+    public PlaceOrderEvent() {
     }
 
-    public PlaceOrder(Long orderId, int tableNumber, List<String> products) {
+    public PlaceOrderEvent(Long orderId, int tableNumber, List<String> products) {
         this.orderId = orderId;
         this.tableNumber = tableNumber;
         this.products = products;

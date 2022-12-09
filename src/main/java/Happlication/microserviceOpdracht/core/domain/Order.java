@@ -39,8 +39,8 @@ public class Order {
         return products;
     }
 
-    public void addProducts(Product product){
-        products.add(product.getProductName());
+    public void addProducts(String product){
+        products.add(product);
     }
 
     public void setProducts(List<String> products) {
