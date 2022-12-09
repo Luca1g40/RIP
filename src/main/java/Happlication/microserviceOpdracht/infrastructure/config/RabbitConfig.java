@@ -14,7 +14,7 @@ public class RabbitConfig {
 
 
     @Bean
-    public Queue orderStatusQueue(){
+    public Queue orderQueue(){
         return QueueBuilder.durable("order-queue").build();
     }
 

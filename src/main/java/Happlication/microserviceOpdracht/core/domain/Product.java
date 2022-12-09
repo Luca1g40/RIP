@@ -34,16 +34,4 @@ public class Product {
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", imagePath='" + imagePath + '\'' +
-                ", productName='" + productName + '\'' +
-                ", productDetails='" + productDetails + '\'' +
-                ", category='" + category + '\'' +
-                ", inStock=" + inStock +
-                '}';
-    }
 }

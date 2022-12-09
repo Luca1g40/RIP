@@ -27,14 +27,10 @@ public class Consumer {
 
     @RabbitListener(queues = { "product-queue" })
     public void consumeProduct(ProductCreated productCreated){
-        System.out.println(productCreated.productName);
-        this.commandHandler.handle(new ProductCreated(productCreated.id, productCreated.productName, productCreated.productDetails, productCreated.category, true, productCreated.prijs));
-    }
-
-    @RabbitListener(queues = { "string-queue" })
-    public void consumeString(String command){
-        this.commandHandler.handle(command);
-
+        this.commandHandler.handle(
+                new ProductCreated(productCreated.id, productCreated.productName,
+                        productCreated.productDetails, productCreated.category,
+                        true, productCreated.prijs));
     }
 
 }
