@@ -5,6 +5,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue productCreatedQueue(){
+        return QueueBuilder.durable("product-queue").build();
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter converter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -28,8 +34,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    Binding deliveryBinding(Queue orderQue, FanoutExchange exchange) {
-        return BindingBuilder.bind(orderQue).to(exchange);
+    Binding deliveryBinding(Queue orderQueue, FanoutExchange exchange) {
+        return BindingBuilder.bind(orderQueue).to(exchange);
     }
 
 

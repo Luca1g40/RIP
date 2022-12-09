@@ -9,22 +9,22 @@ public class Product {
     @Id
     @GeneratedValue
     private Long id;
-    private String imagePath;
     private String productName;
     private String productDetails;
     private String category;
     private boolean inStock;
+    private double price;
 
     public Product() {
     }
 
-    public Product(Long id, String imagePath, String productName, String productDetails, String category, boolean inStock) {
+    public Product(Long id, String productName, String productDetails, String category, boolean inStock, double price) {
         this.id = id;
-        this.imagePath = imagePath;
         this.productName = productName;
         this.productDetails = productDetails;
         this.category = category;
         this.inStock = inStock;
+        this.price = price;
     }
 
     public String getProductName() {

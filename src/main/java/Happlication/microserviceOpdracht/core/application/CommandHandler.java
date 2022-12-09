@@ -2,11 +2,15 @@ package Happlication.microserviceOpdracht.core.application;
 
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
+import Happlication.microserviceOpdracht.core.command.ProductCreated;
+import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
 import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
 import Happlication.microserviceOpdracht.core.command.OrderClaimed;
 import Happlication.microserviceOpdracht.core.command.OrderDone;
 import Happlication.microserviceOpdracht.core.domain.Order;
+import Happlication.microserviceOpdracht.core.domain.Product;
+import Happlication.microserviceOpdracht.core.domain.event.PlaceOrder;
 import Happlication.microserviceOpdracht.core.domain.Table;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.GenericEvent;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
@@ -62,6 +66,10 @@ public class CommandHandler {
     }
 
 
+    public void handle(ProductCreated command) {
+        Product product = new Product(command.id, command.productName, command.productDetails, command.category, true, command.prijs);
+        productRepository.save(product);
+    }
 
 
 }
