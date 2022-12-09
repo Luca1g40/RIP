@@ -2,15 +2,20 @@ package KitchenSystem.MicroService.application;
 
 import KitchenSystem.MicroService.application.dto.IngredientData;
 import KitchenSystem.MicroService.application.dto.ProductData;
+import KitchenSystem.MicroService.application.dto.TableData;
 import KitchenSystem.MicroService.application.port.IngredientRepository;
 import KitchenSystem.MicroService.application.port.ProductRepository;
+import KitchenSystem.MicroService.application.port.TableRepository;
 import KitchenSystem.MicroService.domain.Ingredient;
 import KitchenSystem.MicroService.domain.Product;
+import KitchenSystem.MicroService.domain.Table;
 import KitchenSystem.MicroService.domain.event.PlaceNewIngredient;
 import KitchenSystem.MicroService.domain.event.PlaceNewProduct;
+import KitchenSystem.MicroService.domain.event.PlaceNewTable;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.IngredientRequest;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
+import KitchenSystem.MicroService.infrastructure.driver.web.request.TableRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -19,11 +24,13 @@ public class CommandHandler {
     private final Producer producer;
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
+    private final TableRepository tableRepository;
 
-    public CommandHandler(Producer producer, ProductRepository productRepository, IngredientRepository ingredientRepository) {
+    public CommandHandler(Producer producer, ProductRepository productRepository, IngredientRepository ingredientRepository, TableRepository tableRepository) {
         this.producer = producer;
         this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
+        this.tableRepository = tableRepository;
     }
 
     public ProductData handle(ProductRequest command) {
@@ -54,6 +61,24 @@ public class CommandHandler {
                 ingredient.getAmount()
         ));
         return createIngredientData(ingredient);
+    }
+
+    public TableData handle(TableRequest command) {
+        Table table = new Table(command.tableNumber);
+        tableRepository.save(table);
+
+        producer.sendNewTable(new PlaceNewTable(
+                table.getId(),
+                table.getTableNumber()
+        ));
+        return createTableData(table);
+    }
+
+    public TableData createTableData(Table table) {
+        return new TableData(
+                table.getId(),
+                table.getTableNumber()
+        );
     }
 
     public IngredientData createIngredientData(Ingredient ingredient) {

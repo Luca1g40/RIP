@@ -3,8 +3,10 @@ package KitchenSystem.MicroService.infrastructure.driver.web;
 import KitchenSystem.MicroService.application.CommandHandler;
 import KitchenSystem.MicroService.application.dto.IngredientData;
 import KitchenSystem.MicroService.application.dto.ProductData;
+import KitchenSystem.MicroService.application.dto.TableData;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.IngredientRequest;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
+import KitchenSystem.MicroService.infrastructure.driver.web.request.TableRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +37,16 @@ public class ProductController {
     private IngredientData createNewIngredient(@RequestBody IngredientRequest ingredientRequest) {
         try {
             return this.commandHandler.handle(ingredientRequest);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/table")
+    private TableData createNewTable(@RequestBody TableRequest tableRequest) {
+        try {
+            return this.commandHandler.handle(tableRequest);
 
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
