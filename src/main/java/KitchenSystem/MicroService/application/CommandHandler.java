@@ -1,15 +1,14 @@
 package KitchenSystem.MicroService.application;
 
+import KitchenSystem.MicroService.application.port.IngredientRepository;
 import KitchenSystem.MicroService.application.port.OrderRepository;
 import KitchenSystem.MicroService.application.port.ProductRepository;
-import KitchenSystem.MicroService.command.CreateTable;
-import KitchenSystem.MicroService.command.PlaceOrder;
-import KitchenSystem.MicroService.command.TableRepository;
+import KitchenSystem.MicroService.application.port.TableRepository;
+import KitchenSystem.MicroService.command.*;
+import KitchenSystem.MicroService.domain.Amount;
+import KitchenSystem.MicroService.domain.Ingredient;
 import KitchenSystem.MicroService.domain.Order;
 import KitchenSystem.MicroService.domain.Product;
-import KitchenSystem.MicroService.domain.Table;
-import KitchenSystem.MicroService.domain.event.ClaimOrderEvent;
-import KitchenSystem.MicroService.domain.event.OrderDoneEvent;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.GenericEvent;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
 import KitchenSystem.MicroService.infrastructure.driver.request.ClaimOrderRequest;
@@ -25,12 +24,14 @@ public class CommandHandler {
     private final TableRepository tableRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final IngredientRepository ingredientRepository;
     private final Producer producer;
 
-    public CommandHandler(TableRepository tableRepository, OrderRepository orderRepository, ProductRepository productRepository, Producer producer) {
+    public CommandHandler(TableRepository tableRepository, OrderRepository orderRepository, ProductRepository productRepository, Producer producer, IngredientRepository ingredientRepository) {
         this.tableRepository = tableRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.ingredientRepository = ingredientRepository;
         this.producer = producer;
     }
 
@@ -67,6 +68,11 @@ public class CommandHandler {
 
         producer.sendOrderDoneStatus(new GenericEvent(order.getOrderId(), "orderDone"));
 
+    }
+
+    public void handle(PlaceNewIngredient command) {
+        Ingredient ingredient = new Ingredient(command.id, command.name, Amount.FEW ,command.amount);
+        ingredientRepository.save(ingredient);
     }
 
 

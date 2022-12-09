@@ -10,11 +10,13 @@ public class Ingredient {
     @Id
     private Long id;
     private String name;
-    private Amount amount;
+    private Amount enumAmount;
+    private int amount;
 
-    public Ingredient(Long id, String name, Amount amount) {
+    public Ingredient(Long id, String name, Amount enumAmount, int amount) {
         this.id = id;
         this.name = name;
+        this.enumAmount = enumAmount;
         this.amount = amount;
     }
 
@@ -30,7 +32,9 @@ public class Ingredient {
         return id;
     }
 
-    public Amount getAmount() {
-        return amount;
+    public Amount getEnumAmount() {
+        return enumAmount;
     }
+
+    public int getAmount() {return amount;}
 }

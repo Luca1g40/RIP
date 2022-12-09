@@ -1,6 +1,7 @@
 package KitchenSystem.MicroService.infrastructure;
 
 import KitchenSystem.MicroService.application.CommandHandler;
+import KitchenSystem.MicroService.command.PlaceNewIngredient;
 import KitchenSystem.MicroService.command.PlaceOrder;
 import KitchenSystem.MicroService.infrastructure.driver.messaging.event.GenericEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -26,5 +27,9 @@ public class Consumer {
         }
     }
 
-
+    @RabbitListener(queues = { "ingredient-queue" })
+    public void consumeIngredient(PlaceNewIngredient placeNewIngredient){
+        System.out.println(placeNewIngredient.name);
+        this.commandHandler.handle(new PlaceNewIngredient(placeNewIngredient.id, placeNewIngredient.name, placeNewIngredient.amount));
+    }
 }
