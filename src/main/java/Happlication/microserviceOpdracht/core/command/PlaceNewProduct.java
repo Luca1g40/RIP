@@ -1,6 +1,6 @@
 package Happlication.microserviceOpdracht.core.command;
 
-public class ProductCreated {
+public class PlaceNewProduct {
     public Long id;
     public String productName;
     public String productDetails;
@@ -8,7 +8,10 @@ public class ProductCreated {
     public boolean inStock;
     public double prijs;
 
-    public ProductCreated(Long id, String productName, String productDetails, String category, boolean inStock, double prijs) {
+    public PlaceNewProduct() {
+    }
+
+    public PlaceNewProduct(Long id, String productName, String productDetails, String category, boolean inStock, double prijs) {
         this.id = id;
         this.productName = productName;
         this.productDetails = productDetails;

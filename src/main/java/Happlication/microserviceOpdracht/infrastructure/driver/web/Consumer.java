@@ -1,7 +1,7 @@
 package Happlication.microserviceOpdracht.infrastructure.driver.web;
 
 import Happlication.microserviceOpdracht.core.application.CommandHandler;
-import Happlication.microserviceOpdracht.core.command.ProductCreated;
+import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
 import Happlication.microserviceOpdracht.core.command.OrderClaimed;
 import Happlication.microserviceOpdracht.core.command.OrderDone;
 import Happlication.microserviceOpdracht.infrastructure.driver.messaging.event.GenericEvent;
@@ -26,11 +26,9 @@ public class Consumer {
     }
 
     @RabbitListener(queues = { "product-queue" })
-    public void consumeProduct(ProductCreated productCreated){
-        this.commandHandler.handle(
-                new ProductCreated(productCreated.id, productCreated.productName,
-                        productCreated.productDetails, productCreated.category,
-                        true, productCreated.prijs));
+    public void consumeProduct(PlaceNewProduct placeNewProduct){
+        System.out.println(placeNewProduct.productName);
+        this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.productName, placeNewProduct.productDetails, placeNewProduct.category, true, placeNewProduct.prijs));
     }
 
 }

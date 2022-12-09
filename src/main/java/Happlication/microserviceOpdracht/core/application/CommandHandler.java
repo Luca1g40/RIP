@@ -5,6 +5,7 @@ import Happlication.microserviceOpdracht.core.application.port.ProductRepository
 import Happlication.microserviceOpdracht.core.command.ProductCreated;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
 import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
+import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
 import Happlication.microserviceOpdracht.core.command.OrderClaimed;
 import Happlication.microserviceOpdracht.core.command.OrderDone;
 import Happlication.microserviceOpdracht.core.domain.Order;
@@ -64,7 +65,7 @@ public class CommandHandler {
     }
 
 
-    public void handle(ProductCreated command) {
+    public void handle(PlaceNewProduct command) {
         Product product = new Product(command.id, command.productName, command.productDetails, command.category, true, command.prijs);
         productRepository.save(product);
     }
