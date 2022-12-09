@@ -1,7 +1,5 @@
 package KitchenSystem.MicroService.infrastructure.driven.messaging;
 
-import KitchenSystem.MicroService.domain.event.ClaimOrderEvent;
-import KitchenSystem.MicroService.domain.event.OrderDoneEvent;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +12,13 @@ public class Producer{
         this.template = template;
     }
 
+
     public void sendOrderStatus(GenericEvent event){
-        this.template.convertAndSend("order-status-queue", event);
+        this.template.convertAndSend("order-exchange", "", event);
     }
 
     public void sendOrderDoneStatus(GenericEvent event){
-        this.template.convertAndSend("order-status-queue", event);
+        this.template.convertAndSend("order-exchange", "", event);
     }
 
 

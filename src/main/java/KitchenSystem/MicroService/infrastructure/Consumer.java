@@ -2,6 +2,7 @@ package KitchenSystem.MicroService.infrastructure;
 
 import KitchenSystem.MicroService.application.CommandHandler;
 import KitchenSystem.MicroService.command.PlaceOrder;
+import KitchenSystem.MicroService.infrastructure.driver.messaging.event.GenericEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,14 @@ public class Consumer {
 
     }
 
-    @RabbitListener(queues = { "place-order-queue" })
-    public void consume(PlaceOrder s){
-        this.commandHandler.handle(new PlaceOrder(s.getOrderId(),s.getTableNumber(), s.getProducts())
-        );
+    @RabbitListener(queues = { "order-queue" })
+    public void consume(GenericEvent event){
+        switch (event.eventKey) {
+            case "placeOrder" -> {
+                this.commandHandler.handle(new PlaceOrder(event.id, event.tableNumber, event.products));
+                break;
+            }
+        }
     }
 
 
