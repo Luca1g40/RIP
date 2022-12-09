@@ -1,10 +1,15 @@
 package KitchenSystem.MicroService.application;
 
+import KitchenSystem.MicroService.application.dto.IngredientData;
 import KitchenSystem.MicroService.application.dto.ProductData;
+import KitchenSystem.MicroService.application.port.IngredientRepository;
 import KitchenSystem.MicroService.application.port.ProductRepository;
+import KitchenSystem.MicroService.domain.Ingredient;
 import KitchenSystem.MicroService.domain.Product;
+import KitchenSystem.MicroService.domain.event.PlaceNewIngredient;
 import KitchenSystem.MicroService.domain.event.PlaceNewProduct;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
+import KitchenSystem.MicroService.infrastructure.driver.web.request.IngredientRequest;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +18,12 @@ import org.springframework.stereotype.Service;
 public class CommandHandler {
     private final Producer producer;
     private final ProductRepository productRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public CommandHandler(Producer producer, ProductRepository productRepository) {
+    public CommandHandler(Producer producer, ProductRepository productRepository, IngredientRepository ingredientRepository) {
         this.producer = producer;
         this.productRepository = productRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     public ProductData handle(ProductRequest command) {
@@ -37,6 +44,25 @@ public class CommandHandler {
         return createProductData(product);
     }
 
+    public IngredientData handle(IngredientRequest command) {
+        Ingredient ingredient = new Ingredient(command.name, command.amount);
+        ingredientRepository.save(ingredient);
+
+        producer.sendNewIngredient(new PlaceNewIngredient(
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getAmount()
+        ));
+        return createIngredientData(ingredient);
+    }
+
+    public IngredientData createIngredientData(Ingredient ingredient) {
+        return new IngredientData(
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getAmount()
+        );
+    }
 
     public ProductData createProductData(Product product) {
         return new ProductData(
