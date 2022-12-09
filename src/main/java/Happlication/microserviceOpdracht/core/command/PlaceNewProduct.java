@@ -1,23 +1,21 @@
 package Happlication.microserviceOpdracht.core.command;
 
+import Happlication.microserviceOpdracht.core.domain.Ingredient;
+
+import java.util.List;
+
 public class PlaceNewProduct {
     public Long id;
+    public List<Ingredient> ingredients;
     public String productName;
-    public String productDetails;
-    public String category;
-    public boolean inStock;
-    public double prijs;
+
 
     public PlaceNewProduct() {
     }
 
-    public PlaceNewProduct(Long id, String productName, String productDetails, String category, boolean inStock, double prijs) {
+    public PlaceNewProduct(Long id, List<Ingredient> ingredients, String productName) {
         this.id = id;
+        this.ingredients = ingredients;
         this.productName = productName;
-        this.productDetails = productDetails;
-        this.category = category;
-        this.inStock = inStock;
-        this.prijs = prijs;
     }
-
 }

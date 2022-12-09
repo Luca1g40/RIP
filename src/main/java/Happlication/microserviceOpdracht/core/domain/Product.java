@@ -1,37 +1,37 @@
 package Happlication.microserviceOpdracht.core.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Product {
     @Id
-    @GeneratedValue
     private Long id;
+    @OneToMany
+    private List<Ingredient> ingredients;
     private String productName;
-    private String productDetails;
-    private String category;
-    private boolean inStock;
-    private double price;
+
 
     public Product() {
     }
 
-    public Product(Long id, String productName, String productDetails, String category, boolean inStock, double price) {
+    public Product(Long id, List<Ingredient> ingredients, String productName) {
         this.id = id;
+        this.ingredients = ingredients;
         this.productName = productName;
-        this.productDetails = productDetails;
-        this.category = category;
-        this.inStock = inStock;
-        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     public String getProductName() {
         return productName;
-    }
-
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
     }
 }
