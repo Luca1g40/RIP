@@ -16,7 +16,7 @@ public class Consumer {
         this.commandHandler = commandHandler;
     }
 
-    @RabbitListener(queues = { "order-status-queue" })
+    @RabbitListener(queues = { "order-queue" })
     public void consumeTest(GenericEvent event){
         switch (event.eventKey) {
             case "claimOrder" -> this.commandHandler.handle(new OrderClaimed(event.id));

@@ -1,5 +1,6 @@
 package Happlication.microserviceOpdracht.infrastructure.config;
 
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -12,8 +13,9 @@ public class RabbitConfig {
 
     @Bean
     public Queue orderStatusQueue(){
-        return QueueBuilder.durable("order-status-queue").build();
+        return QueueBuilder.durable("order-queue").build();
     }
+
 
 
     @Bean

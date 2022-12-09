@@ -5,6 +5,7 @@ import Happlication.microserviceOpdracht.core.command.OrderClaimed;
 import Happlication.microserviceOpdracht.core.command.OrderDone;
 import Happlication.microserviceOpdracht.core.domain.Order;
 import Happlication.microserviceOpdracht.core.domain.event.PlaceOrder;
+import Happlication.microserviceOpdracht.infrastructure.driven.messaging.GenericEvent;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
 import Happlication.microserviceOpdracht.infrastructure.driver.web.request.OrderCreated;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class CommandHandler {
     public Order handle(OrderCreated command) {
         Order order = new Order(command.tableNumber, command.products);
         this.orderRepository.save(order);
-        producer.sendOrderToKitchen(new PlaceOrder(order.getOrderId(), order.getTableNumber(), order.getProducts()));
+        producer.sendOrderToKitchen(new GenericEvent(order.getOrderId(), order.getTableNumber(), order.getProducts(), "placeOrder"));
         return order;
     }
 
