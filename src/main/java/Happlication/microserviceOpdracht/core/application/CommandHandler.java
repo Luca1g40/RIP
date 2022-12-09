@@ -2,7 +2,6 @@ package Happlication.microserviceOpdracht.core.application;
 
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
-import Happlication.microserviceOpdracht.core.command.ProductCreated;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
 import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
 import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
