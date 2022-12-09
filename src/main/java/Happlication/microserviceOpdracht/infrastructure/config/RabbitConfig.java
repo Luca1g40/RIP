@@ -22,11 +22,6 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue stringQueue(){
-        return QueueBuilder.durable("string-queue").build();
-    }
-
-    @Bean
     public Jackson2JsonMessageConverter converter() {
         return new Jackson2JsonMessageConverter();
     }
