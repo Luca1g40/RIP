@@ -16,13 +16,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue productCreatedQueue(){
-        return QueueBuilder.durable("product-queue").build();
+    public Queue ingredientCreatedQueue(){
+        return QueueBuilder.durable("ingredient-queue").build();
     }
 
     @Bean
-    public Queue ingredientCreatedQueue(){
-        return QueueBuilder.durable("ingredient-queue").build();
+    public Queue OrderedIngredientQueue(){
+        return QueueBuilder.durable("ordered-ingredients").build();
     }
 
     @Bean

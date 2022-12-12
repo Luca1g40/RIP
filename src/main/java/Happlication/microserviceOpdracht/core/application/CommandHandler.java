@@ -1,38 +1,41 @@
 package Happlication.microserviceOpdracht.core.application;
 
 import Happlication.microserviceOpdracht.core.application.port.IngredientRepository;
-import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.command.PlaceNewIngredient;
-import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
+import Happlication.microserviceOpdracht.core.domain.Amount;
 import Happlication.microserviceOpdracht.core.domain.Ingredient;
-import Happlication.microserviceOpdracht.core.domain.Product;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
 @Transactional
 public class CommandHandler {
 
-    private Producer producer;
-    private final ProductRepository productRepository;
-
+    private final Producer producer;
     private final IngredientRepository ingredientRepository;
 
-    public CommandHandler(Producer producer,  ProductRepository productRepository, IngredientRepository ingredientRepository) {
+    public CommandHandler(Producer producer, IngredientRepository ingredientRepository) {
         this.producer = producer;
-        this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
     }
 
-    public void handle(PlaceNewProduct command) {
-        Product product = new Product(command.id, command.ingredients, command.productName);
-        productRepository.save(product);
+    public void handle(PlaceNewIngredient command) {
+        Ingredient ingredient = new Ingredient(command.id, command.name, command.amountEnum, command.amount);
+        ingredientRepository.save(ingredient);
     }
 
-    public void handle(PlaceNewIngredient command) {
-        Ingredient ingredient = new Ingredient(command.id, command.name, command.amount);
-        ingredientRepository.save(ingredient);
+    public void handle(List<String> OrderedIngredients) {
+        for(String name : OrderedIngredients){
+            Ingredient ingredient = ingredientRepository.findByName(name);
+            ingredient.removeOne();
+            if(ingredient.getAmount() <= 10){
+                ingredient.setEnumAmount(Amount.FEW);
+                producer.sendUpdatedIngredientAmount(ingredient);
+            }
+            ingredientRepository.save(ingredient);
+        }
     }
 }
