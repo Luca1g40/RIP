@@ -75,5 +75,8 @@ public class CommandHandler {
         ingredientRepository.save(ingredient);
     }
 
-
+    public void handle(PlaceNewProduct command) {
+        Product product = new Product(command.id, command.productName, command.ingredients, command.destination);
+        productRepository.save(product);
+    }
 }
