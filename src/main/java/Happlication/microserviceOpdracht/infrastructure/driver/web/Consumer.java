@@ -31,4 +31,9 @@ public class Consumer {
         this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.productName, placeNewProduct.productDetails, placeNewProduct.category, true, placeNewProduct.prijs));
     }
 
+    @RabbitListener(queues = { "productoutofstock-guest" })
+    public void productOutOfStock(String message){
+        System.out.println(message);
+    }
+
 }
