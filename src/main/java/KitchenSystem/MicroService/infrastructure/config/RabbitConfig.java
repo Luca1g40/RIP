@@ -18,6 +18,11 @@ public class RabbitConfig {
     public Queue ingredientCreatedQueue(){
         return QueueBuilder.durable("ingredient-queue").build();
     }
+
+    @Bean
+    public Queue ingredientUpdatedQueue(){
+        return QueueBuilder.durable("ingredient-amount-changed").build();
+    }
     @Bean
     public Jackson2JsonMessageConverter converter() {
         return new Jackson2JsonMessageConverter();

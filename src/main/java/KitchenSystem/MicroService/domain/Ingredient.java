@@ -2,6 +2,8 @@ package KitchenSystem.MicroService.domain;
 
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Entity
@@ -10,6 +12,7 @@ public class Ingredient {
     @Id
     private Long id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private Amount enumAmount;
     private int amount;
 
@@ -37,4 +40,12 @@ public class Ingredient {
     }
 
     public int getAmount() {return amount;}
+
+    public void removeOne(){
+        this.amount-= 1;
+    }
+
+    public void setEnumAmount(Amount amount){
+        this.enumAmount = amount;
+    }
 }

@@ -4,6 +4,7 @@ import KitchenSystem.MicroService.application.CommandHandler;
 import KitchenSystem.MicroService.command.PlaceNewIngredient;
 import KitchenSystem.MicroService.command.PlaceNewProduct;
 import KitchenSystem.MicroService.command.PlaceOrder;
+import KitchenSystem.MicroService.domain.Ingredient;
 import KitchenSystem.MicroService.infrastructure.driver.messaging.event.GenericEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class Consumer {
 
     }
 
-    @RabbitListener(queues = { "order-queue" })
+    @RabbitListener(queues = { "order-placed-queue" })
     public void consume(GenericEvent event){
         switch (event.eventKey) {
             case "placeOrder" -> {
@@ -38,5 +39,10 @@ public class Consumer {
     public void consumeProduct(PlaceNewProduct placeNewProduct){
         System.out.println(placeNewProduct.productName);
         this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.ingredients, placeNewProduct.productName, placeNewProduct.destination));
+    }
+
+    @RabbitListener(queues = { "ingredient-amount-changed" })
+    public void ingredientAmountChanged(Ingredient ingredient){
+        this.commandHandler.handle(ingredient);
     }
 }
