@@ -21,7 +21,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue productCreatedQueue(){
-        return QueueBuilder.durable("product-queue").build();
+        return QueueBuilder.durable("product-guest-queue").build();
     }
 
     @Bean
