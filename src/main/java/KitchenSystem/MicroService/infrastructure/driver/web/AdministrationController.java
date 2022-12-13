@@ -16,10 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/administration")
-public class ProductController {
+public class AdministrationController {
     private final CommandHandler commandHandler;
 
-    public ProductController(CommandHandler commandHandler) {
+    public AdministrationController(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
 
@@ -27,7 +27,6 @@ public class ProductController {
     private ProductData createNewProduct(@RequestBody ProductRequest productRequest) {
         try {
             return this.commandHandler.handle(productRequest);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,7 +1,5 @@
 package KitchenSystem.MicroService.domain.event;
 
-
-import KitchenSystem.MicroService.domain.Ingredient;
 import KitchenSystem.MicroService.domain.ProductDestination;
 import KitchenSystem.MicroService.domain.ProductType;
 
@@ -13,20 +11,20 @@ public class PlaceNewProduct {
     private String productDetails;
     private String category;
     private boolean inStock;
-    private List<Ingredient> ingredients;
+    private List<String> ingredientNames;
     private ProductDestination destination;
     private double prijs;
     private ProductType productType;
 
     public PlaceNewProduct() {}
 
-    public PlaceNewProduct(Long id, String productName, String productDetails, String category, boolean inStock, List<Ingredient> ingredients, ProductDestination destination, double prijs, ProductType productType) {
+    public PlaceNewProduct(Long id, String productName, String productDetails, String category, boolean inStock, List<String> ingredientNames, ProductDestination destination, double prijs, ProductType productType) {
         this.id = id;
         this.productName = productName;
         this.productDetails = productDetails;
         this.category = category;
         this.inStock = inStock;
-        this.ingredients = ingredients;
+        this.ingredientNames = ingredientNames;
         this.destination = destination;
         this.prijs = prijs;
         this.productType = productType;
@@ -52,8 +50,8 @@ public class PlaceNewProduct {
         return inStock;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public List<String> getIngredientNames() {
+        return ingredientNames;
     }
 
     public ProductDestination getDestination() {

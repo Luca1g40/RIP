@@ -16,8 +16,8 @@ public class Producer {
     }
 
     public void sendNewProduct(PlaceNewProduct product){
-        this.template.convertAndSend("product-queue", product);
-        System.out.println("product ontvangen " + product.getProductName());
+        Object returnMessage = this.template.convertSendAndReceive("product-exchange", "", product);
+        System.out.println("Bericht: " + returnMessage.toString());
     }
 
     public void sendNewIngredient(PlaceNewIngredient ingredient){

@@ -17,9 +17,14 @@ import KitchenSystem.MicroService.infrastructure.driver.web.request.IngredientRe
 import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
 import KitchenSystem.MicroService.infrastructure.driver.web.request.TableRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
+@Transactional
 public class CommandHandler {
     private final Producer producer;
     private final ProductRepository productRepository;
@@ -34,20 +39,25 @@ public class CommandHandler {
     }
 
     public ProductData handle(ProductRequest command) {
-        Product product = new Product(command.productName, command.productDetails, command.category, command.inStock, command.ingredients, command.destination, command.prijs, command.productType);
+        List<Ingredient> ingredients = new ArrayList<>();
+        for(String ingredientName : command.ingredientNames){
+            Ingredient ingredient = ingredientRepository.findByName(ingredientName);
+            ingredients.add(ingredient);
+        }
+        Product product = new Product(command.productName, command.productDetails, command.category, command.inStock, ingredients, command.destination, command.prijs, command.productType);
         productRepository.save(product);
 
-        producer.sendNewProduct(new PlaceNewProduct(
-                product.getId(),
-                product.getProductName(),
-                product.getProductDetails(),
-                product.getCategory(),
-                product.isInStock(),
-                product.getIngredients(),
-                product.getDestination(),
-                product.getPrijs(),
-                product.getProductType()
-        ));
+            producer.sendNewProduct(new PlaceNewProduct(
+                    product.getId(),
+                    product.getProductName(),
+                    product.getProductDetails(),
+                    product.getCategory(),
+                    product.isInStock(),
+                    command.ingredientNames,
+                    product.getDestination(),
+                    product.getPrijs(),
+                    product.getProductType()
+            ));
         return createProductData(product);
     }
 
