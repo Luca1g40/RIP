@@ -100,12 +100,22 @@ public class CommandHandler {
     }
 
     public void handle(PlaceNewIngredient command) {
-        Ingredient ingredient = new Ingredient(command.id, command.name, Amount.FEW ,command.amount);
+        Amount enumAmount = Amount.LOTS;
+        if(command.amount <= 10){
+            enumAmount = Amount.FEW;
+        }
+        Ingredient ingredient = new Ingredient(command.id, command.name, enumAmount,command.amount);
         ingredientRepository.save(ingredient);
     }
 
     public void handle(PlaceNewProduct command) {
-        Product product = new Product(command.id, command.productName, command.ingredients, command.destination);
+        List<Ingredient> ingredients = new ArrayList<>();
+        for(String ingredientName : command.ingredientNames){
+            Ingredient ingredient = ingredientRepository.findByName(ingredientName);
+            ingredients.add(ingredient);
+        }
+
+        Product product = new Product(command.id, command.productName, ingredients, command.destination);
         productRepository.save(product);
     }
 

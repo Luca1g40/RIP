@@ -31,14 +31,14 @@ public class Consumer {
 
     @RabbitListener(queues = { "ingredient-queue" })
     public void consumeIngredient(PlaceNewIngredient placeNewIngredient){
-        System.out.println(placeNewIngredient.name);
+        System.out.println("Naam binnengekomen ingredient " + placeNewIngredient.name);
         this.commandHandler.handle(new PlaceNewIngredient(placeNewIngredient.id, placeNewIngredient.name, placeNewIngredient.amount));
     }
 
-    @RabbitListener(queues = { "product-queue" })
-    public void consumeProduct(PlaceNewProduct placeNewProduct){
-        System.out.println(placeNewProduct.productName);
-        this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.ingredients, placeNewProduct.productName, placeNewProduct.destination));
+    @RabbitListener(queues = { "product-kitchen-queue" })
+    public String consumeProduct(PlaceNewProduct placeNewProduct){
+        this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.ingredientNames, placeNewProduct.productName, placeNewProduct.destination));
+        return "Product " + placeNewProduct.productName + " is aangekomen bij de keukenmodule";
     }
 
     @RabbitListener(queues = { "ingredient-amount-changed" })
