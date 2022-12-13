@@ -19,7 +19,7 @@ public class Consumer {
     @RabbitListener(queues = { "ingredient-queue" })
     public void consumeIngredient(PlaceNewIngredient placeNewIngredient){
         System.out.println(placeNewIngredient.name);
-        this.commandHandler.handle(new PlaceNewIngredient(placeNewIngredient.id, placeNewIngredient.name, placeNewIngredient.amount, placeNewIngredient.amountEnum));
+        this.commandHandler.handle(new PlaceNewIngredient(placeNewIngredient.id, placeNewIngredient.name, placeNewIngredient.amount));
     }
 
     @RabbitListener(queues = { "ordered-ingredients" })

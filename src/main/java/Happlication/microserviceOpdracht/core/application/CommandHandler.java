@@ -23,7 +23,12 @@ public class CommandHandler {
     }
 
     public void handle(PlaceNewIngredient command) {
-        Ingredient ingredient = new Ingredient(command.id, command.name, command.amountEnum, command.amount);
+        Amount enumAmount = Amount.LOTS;
+        if(command.amount <= 10){
+            enumAmount = Amount.FEW;
+        }
+
+        Ingredient ingredient = new Ingredient(command.id, command.name, enumAmount,command.amount);
         ingredientRepository.save(ingredient);
     }
 
