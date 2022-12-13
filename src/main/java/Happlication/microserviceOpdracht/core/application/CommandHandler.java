@@ -3,18 +3,18 @@ package Happlication.microserviceOpdracht.core.application;
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
-import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
-import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
-import Happlication.microserviceOpdracht.core.command.OrderClaimed;
-import Happlication.microserviceOpdracht.core.command.OrderDone;
+import Happlication.microserviceOpdracht.core.command.*;
 import Happlication.microserviceOpdracht.core.domain.Order;
 import Happlication.microserviceOpdracht.core.domain.Product;
+import Happlication.microserviceOpdracht.core.domain.ShoppingCart;
 import Happlication.microserviceOpdracht.core.domain.Table;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.GenericEvent;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
 import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -70,4 +70,9 @@ public class CommandHandler {
     }
 
 
+    public void handle(PlaceNewTable command) {
+        List<Order> orders = new ArrayList<>();
+        Table table = new Table(command.id, command.tableNumber, orders);
+        tableRepository.save(table);
+    }
 }
