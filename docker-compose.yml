@@ -35,3 +35,29 @@ services:
     volumes:
       - "./data:/var/data/db"
 
+  dbadministration:
+    build: development/db
+    ports:
+      - "45432:5432"
+    environment:
+      - POSTGRES_USER=administration-db
+      - POSTGRES_PASSWORD=administration-db
+      - DB_APP_NAME=administration-db
+      - DB_APP_USER=administration-db
+      - DB_APP_PASS=administration-db
+    volumes:
+      - "./data:/var/data/db"
+
+  dbinventory:
+      build: development/db
+      ports:
+        - "55432:5432"
+      environment:
+        - POSTGRES_USER=inventory-db
+        - POSTGRES_PASSWORD=inventory-db
+        - DB_APP_NAME=inventory-db
+        - DB_APP_USER=inventory-db
+        - DB_APP_PASS=inventory-db
+      volumes:
+        - "./data:/var/data/db"
+

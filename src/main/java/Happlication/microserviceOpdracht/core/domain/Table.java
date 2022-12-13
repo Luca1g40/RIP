@@ -13,7 +13,7 @@ public class Table {
     @GeneratedValue
     private Long tableId;
     private int tableNumber;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ShoppingCart shoppingCart;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -21,10 +21,10 @@ public class Table {
 
     public Table() {}
 
-    public Table(Long tableId, int tableNumber, ShoppingCart shoppingCart, List<Order> orders) {
+    public Table(Long tableId, int tableNumber, List<Order> orders) {
         this.tableId = tableId;
         this.tableNumber = tableNumber;
-        this.shoppingCart = shoppingCart;
+        this.shoppingCart = new ShoppingCart();
         this.orders = orders;
     }
 

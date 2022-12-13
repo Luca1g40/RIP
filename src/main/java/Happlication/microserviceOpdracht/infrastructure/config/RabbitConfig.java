@@ -30,6 +30,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue tableCreatedQueue(){
+        return QueueBuilder.durable("table-queue").build();
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter converter() {
         return new Jackson2JsonMessageConverter();
     }
