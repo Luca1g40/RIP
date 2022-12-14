@@ -34,4 +34,36 @@ public class Product {
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getProductDetails() {
+        return productDetails;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", productName='" + productName + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", category='" + category + '\'' +
+                ", inStock=" + inStock +
+                ", price=" + price +
+                '}';
+    }
 }
