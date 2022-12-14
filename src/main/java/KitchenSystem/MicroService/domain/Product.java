@@ -12,13 +12,13 @@ public class Product {
     @ManyToMany
     private List<Ingredient> ingredients;
     @Enumerated(EnumType.STRING)
-    private Destination destination;
+    private ProductDestination productDestination;
 
-    public Product(Long id, String productName, List<Ingredient> ingredients, Destination destination) {
+    public Product(Long id, String productName, List<Ingredient> ingredients, ProductDestination productDestination) {
         this.id = id;
         this.productName = productName;
         this.ingredients = ingredients;
-        this.destination = destination;
+        this.productDestination = productDestination;
     }
 
     public Product() {
@@ -32,8 +32,8 @@ public class Product {
         return ingredients;
     }
 
-    public Destination getDestination() {
-        return destination;
+    public ProductDestination getDestination() {
+        return productDestination;
     }
 
     public Long getId() {

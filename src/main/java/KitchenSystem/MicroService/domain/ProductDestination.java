@@ -1,6 +1,6 @@
 package KitchenSystem.MicroService.domain;
 
-public enum Destination {
+public enum ProductDestination {
     BAR,
     KITCHEN
 }

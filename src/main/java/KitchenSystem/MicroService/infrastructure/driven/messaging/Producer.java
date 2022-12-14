@@ -4,10 +4,12 @@ import KitchenSystem.MicroService.infrastructure.driver.messaging.event.WaiterEv
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class Producer{
 
-    private RabbitTemplate template;
+    private final RabbitTemplate template;
 
     public Producer(RabbitTemplate template){
         this.template = template;
@@ -25,4 +27,13 @@ public class Producer{
     public void sendOrderDoneToWaiter(WaiterEvent waiterEvent) {
         this.template.convertAndSend("waiter-order-done-queue", waiterEvent);
     }
+    public void sendOrderedIngredients(List<String> ingredients){
+        this.template.convertAndSend("ordered-ingredients", ingredients);
+    }
+
+    public void sendProductOutOfStock(String message){
+        this.template.convertAndSend("productoutofstock-guest", message);
+    }
+
+
 }
