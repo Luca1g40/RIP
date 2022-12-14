@@ -1,14 +1,21 @@
 package KitchenSystem.MicroService.application;
 
-import KitchenSystem.MicroService.application.dto.OrderData;
 import KitchenSystem.MicroService.application.port.IngredientRepository;
 import KitchenSystem.MicroService.application.port.OrderRepository;
 import KitchenSystem.MicroService.application.port.ProductRepository;
+import KitchenSystem.MicroService.command.PlaceNewIngredient;
+import KitchenSystem.MicroService.command.PlaceNewProduct;
+import KitchenSystem.MicroService.command.PlaceOrder;
+import KitchenSystem.MicroService.domain.Amount;
+import KitchenSystem.MicroService.domain.Ingredient;
+import KitchenSystem.MicroService.domain.Order;
+import KitchenSystem.MicroService.domain.Product;
 import KitchenSystem.MicroService.application.port.TableRepository;
 import KitchenSystem.MicroService.command.*;
 import KitchenSystem.MicroService.domain.*;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.GenericEvent;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
+import KitchenSystem.MicroService.infrastructure.driver.messaging.event.WaiterEvent;
 import KitchenSystem.MicroService.infrastructure.driver.request.ClaimOrderRequest;
 import KitchenSystem.MicroService.infrastructure.driver.request.OrderDoneRequest;
 import org.springframework.stereotype.Service;
@@ -22,24 +29,19 @@ import java.util.List;
 @Transactional
 public class CommandHandler {
 
-    private final TableRepository tableRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
     private final Producer producer;
-
     private final WebClient webClient = WebClient.create();
 
 
-
-    public CommandHandler(TableRepository tableRepository, OrderRepository orderRepository, ProductRepository productRepository, Producer producer, IngredientRepository ingredientRepository) {
-        this.tableRepository = tableRepository;
+    public CommandHandler(OrderRepository orderRepository, ProductRepository productRepository, IngredientRepository ingredientRepository, Producer producer) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
         this.producer = producer;
     }
-
 
     public void handle(PlaceOrder command){
         List<Product> products = new ArrayList<>();
@@ -84,6 +86,7 @@ public class CommandHandler {
         }
         producer.sendOrderedIngredients(ingredients);
         producer.sendOrderStatus(new GenericEvent(order.getOrderId(), "claimOrder"));
+
     }
 
     public void handle(OrderDoneRequest command){
@@ -94,6 +97,7 @@ public class CommandHandler {
         this.orderRepository.save(order);
 
         producer.sendOrderDoneStatus(new GenericEvent(order.getOrderId(), "orderDone"));
+        producer.sendOrderDoneToWaiter(new WaiterEvent(order.getOrderId(), order.getTableNumber(), order.getProductNames()));
 
     }
 
