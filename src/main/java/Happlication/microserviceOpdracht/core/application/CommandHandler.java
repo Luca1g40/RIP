@@ -1,5 +1,6 @@
 package Happlication.microserviceOpdracht.core.application;
 
+import Happlication.microserviceOpdracht.core.application.dto.ProductData;
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
@@ -74,5 +75,30 @@ public class CommandHandler {
         List<Order> orders = new ArrayList<>();
         Table table = new Table(command.id, command.tableNumber, orders);
         tableRepository.save(table);
+    }
+
+    public List<ProductData> getAllProducts() {
+        List<ProductData> products = new ArrayList<>();
+        for (Product product : productRepository.findAll()) {
+            if (product.isInStock()) {
+                products.add(createProductData(product));
+            }
+            else {
+                System.out.println(product.getProductName() + " is niet op voorraad!");
+            }
+        }
+        System.out.println("Er zijn "+ products.size() + " producten in de Menukaart");
+        return products;
+    }
+
+    public ProductData createProductData(Product product) {
+        return new ProductData(
+                product.getId(),
+                product.getProductName(),
+                product.getProductDetails(),
+                product.getCategory(),
+                product.isInStock(),
+                product.getPrice()
+        );
     }
 }
