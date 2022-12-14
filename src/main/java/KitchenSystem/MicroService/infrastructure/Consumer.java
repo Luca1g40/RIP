@@ -6,17 +6,20 @@ import KitchenSystem.MicroService.infrastructure.driver.messaging.event.GenericE
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class Consumer {
 
     private final CommandHandler commandHandler;
+
 
     public Consumer(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
 
     }
 
-    @RabbitListener(queues = { "order-queue" })
+    @RabbitListener(queues = { "order-placed-queue" })
     public void consume(GenericEvent event){
         switch (event.eventKey) {
             case "placeOrder" -> {
