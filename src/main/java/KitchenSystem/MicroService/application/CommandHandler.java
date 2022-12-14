@@ -53,13 +53,25 @@ public class CommandHandler {
         Order order = new Order(command.getOrderId(), command.getTableNumber(), products);
         for (Product product : products){
             for(Ingredient ingredient : product.getIngredients()){
-                if(ingredient.getEnumAmount() == Amount.FEW){
+                if(ingredient.getEnumAmount() == Amount.FEW) {
+                    //Get ingredient where amount is few to check stock in inventorymodule
                     WebClient.ResponseSpec responseSpec = webClient.get()
                             .uri("http://localhost:8090/stock/" + ingredient.getId())
                             .retrieve();
                     String responseBody = responseSpec.bodyToMono(String.class).block();
                     System.out.println("response: " + responseBody);
-                    if(Integer.parseInt(responseBody) <= 0){
+                    //Changes Instock boolean to false in guestmodule
+                    if (Integer.parseInt(responseBody) == 1) {
+                        for (Product productOutOfStock : getAllProductsUsingIngredient(ingredient)) {
+                            responseSpec = webClient.put()
+                                    .uri("http://localhost:8081/guest/update/product/" + productOutOfStock.getId())
+                                    .retrieve();
+                            responseBody = responseSpec.bodyToMono(String.class).block();
+                            System.out.println("response: " + responseBody);
+                        }
+                    }
+                    //Sends message to guest when amount of ordered product is 0
+                    if (Integer.parseInt(responseBody) <= 0) {
                         producer.sendProductOutOfStock("Helaas is het gerecht " + product.getProductName() + " niet beschikbaar");
                         return;
                     }
@@ -67,7 +79,19 @@ public class CommandHandler {
             }
         }
         this.orderRepository.save(order);
+    }
 
+    public List<Product> getAllProductsUsingIngredient(Ingredient ingredientOutOfStock){
+        List<Product> allProducts = productRepository.findAll();
+        List<Product> productsOutOfStock = new ArrayList<>();
+        for(Product product : allProducts){
+            for(Ingredient ingredient : product.getIngredients()){
+                if(ingredient.equals(ingredientOutOfStock)){
+                    productsOutOfStock.add(product);
+                }
+            }
+        }
+        return  productsOutOfStock;
     }
 
     public void handle(ClaimOrderRequest command){
