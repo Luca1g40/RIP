@@ -2,12 +2,10 @@ package Happlication.microserviceOpdracht.core.application;
 
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
+import Happlication.microserviceOpdracht.core.application.port.ReviewRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
 import Happlication.microserviceOpdracht.core.command.*;
-import Happlication.microserviceOpdracht.core.domain.Order;
-import Happlication.microserviceOpdracht.core.domain.Product;
-import Happlication.microserviceOpdracht.core.domain.ShoppingCart;
-import Happlication.microserviceOpdracht.core.domain.Table;
+import Happlication.microserviceOpdracht.core.domain.*;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.GenericEvent;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
 import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
@@ -25,12 +23,14 @@ public class CommandHandler {
     private final OrderRepository orderRepository;
     private final TableRepository tableRepository;
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
 
-    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository, ProductRepository productRepository) {
+    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository, ProductRepository productRepository, ReviewRepository reviewRepository) {
         this.producer = producer;
         this.orderRepository = orderRepository;
         this.tableRepository = tableRepository;
         this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public Order handle(OrderCreatedEvent event) {
@@ -67,6 +67,13 @@ public class CommandHandler {
     public void handle(PlaceNewProduct command) {
         Product product = new Product(command.id, command.productName, command.productDetails, command.category, true, command.prijs);
         productRepository.save(product);
+    }
+
+    public Review handle(Long orderId, String foodReview, int foodScore, String foodDeliveryReview, int foodDeliveryScore){
+       Order order = orderRepository.getById(orderId);
+       Review review = new Review(foodReview,foodScore,foodDeliveryReview,foodDeliveryScore, order) ;
+       reviewRepository.save(review);
+       return review;
     }
 
 
