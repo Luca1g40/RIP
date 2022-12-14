@@ -1,21 +1,11 @@
 package KitchenSystem.MicroService.application;
 
-import KitchenSystem.MicroService.application.dto.IngredientData;
-import KitchenSystem.MicroService.application.dto.ProductData;
-import KitchenSystem.MicroService.application.dto.TableData;
-import KitchenSystem.MicroService.application.port.IngredientRepository;
-import KitchenSystem.MicroService.application.port.ProductRepository;
-import KitchenSystem.MicroService.application.port.TableRepository;
-import KitchenSystem.MicroService.domain.Ingredient;
-import KitchenSystem.MicroService.domain.Product;
-import KitchenSystem.MicroService.domain.Table;
-import KitchenSystem.MicroService.domain.event.PlaceNewIngredient;
-import KitchenSystem.MicroService.domain.event.PlaceNewProduct;
-import KitchenSystem.MicroService.domain.event.PlaceNewTable;
+import KitchenSystem.MicroService.application.dto.*;
+import KitchenSystem.MicroService.application.port.*;
+import KitchenSystem.MicroService.domain.*;
+import KitchenSystem.MicroService.domain.event.*;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
-import KitchenSystem.MicroService.infrastructure.driver.web.request.IngredientRequest;
-import KitchenSystem.MicroService.infrastructure.driver.web.request.ProductRequest;
-import KitchenSystem.MicroService.infrastructure.driver.web.request.TableRequest;
+import KitchenSystem.MicroService.infrastructure.driver.web.request.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +20,17 @@ public class CommandHandler {
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
     private final TableRepository tableRepository;
+    private final AreaRepository areaRepository;
+    private final WaiterRepository waiterRepository;
 
-    public CommandHandler(Producer producer, ProductRepository productRepository, IngredientRepository ingredientRepository, TableRepository tableRepository) {
+    public CommandHandler(Producer producer, ProductRepository productRepository, IngredientRepository ingredientRepository, TableRepository tableRepository, AreaRepository areaRepository, WaiterRepository waiterRepository) {
         this.producer = producer;
         this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
         this.tableRepository = tableRepository;
+        this.areaRepository = areaRepository;
+        this.waiterRepository = waiterRepository;
+
     }
 
     public ProductData handle(ProductRequest command) {
@@ -84,6 +79,30 @@ public class CommandHandler {
         return createTableData(table);
     }
 
+    public AreaData handle(AreaRequest command) {
+        Area area = new Area(command.tables, command.waiters);
+        areaRepository.save(area);
+
+        producer.sendNewArea(new PlaceNewArea(
+                area.getId(),
+                area.getTables(),
+                area.getWaiters()
+        ));
+        return createAreaData(area);
+    }
+
+    public WaiterData handle() {
+        Waiter waiter = new Waiter();
+        waiterRepository.save(waiter);
+
+        producer.sendNewWaiter(new PlaceNewWaiter(
+                waiter.getId()
+        ));
+        return createWaiterData(waiter);
+    }
+
+
+
     public TableData createTableData(Table table) {
         return new TableData(
                 table.getId(),
@@ -110,6 +129,19 @@ public class CommandHandler {
                 product.getDestination(),
                 product.getPrijs(),
                 product.getProductType()
+        );
+    }
+
+    public AreaData createAreaData(Area area) {
+        return new AreaData(
+                area.getId(),
+                area.getTables(),
+                area.getWaiters()
+        );
+    }
+    public WaiterData createWaiterData(Waiter waiter) {
+        return new WaiterData(
+                waiter.getId()
         );
     }
 }
