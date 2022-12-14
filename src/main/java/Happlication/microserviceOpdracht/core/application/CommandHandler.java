@@ -5,14 +5,8 @@ import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.application.port.ReviewRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
-import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
-import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
-import Happlication.microserviceOpdracht.core.command.OrderClaimed;
-import Happlication.microserviceOpdracht.core.command.OrderDone;
-import Happlication.microserviceOpdracht.core.domain.Area;
-import Happlication.microserviceOpdracht.core.domain.Order;
-import Happlication.microserviceOpdracht.core.domain.Product;
-import Happlication.microserviceOpdracht.core.domain.Table;
+import Happlication.microserviceOpdracht.core.command.*;
+import Happlication.microserviceOpdracht.core.domain.*;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.GenericEvent;
 import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Producer;
 import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
@@ -20,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -34,7 +27,8 @@ public class CommandHandler {
     private final AreaRepository areaRepository;
     private final ReviewRepository reviewRepository;
 
-    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository, ProductRepository productRepository, AreaRepository areaRepository) {
+    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository,
+                          ProductRepository productRepository, AreaRepository areaRepository, ReviewRepository reviewRepository) {
         this.producer = producer;
         this.orderRepository = orderRepository;
         this.tableRepository = tableRepository;
@@ -106,11 +100,11 @@ public class CommandHandler {
         tableRepository.save(table);
     }
 
-    public List<ProductData> getAllProducts() {
-        List<ProductData> products = new ArrayList<>();
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
         for (Product product : productRepository.findAll()) {
             if (product.isInStock()) {
-                products.add(createProductData(product));
+                products.add(product);
             }
             else {
                 System.out.println(product.getProductName() + " is niet op voorraad!");
@@ -118,16 +112,5 @@ public class CommandHandler {
         }
         System.out.println("Er zijn "+ products.size() + " producten in de Menukaart");
         return products;
-    }
-
-    public ProductData createProductData(Product product) {
-        return new ProductData(
-                product.getId(),
-                product.getProductName(),
-                product.getProductDetails(),
-                product.getCategory(),
-                product.isInStock(),
-                product.getPrice()
-        );
     }
 }

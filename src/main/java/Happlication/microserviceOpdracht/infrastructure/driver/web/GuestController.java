@@ -1,10 +1,10 @@
 package Happlication.microserviceOpdracht.infrastructure.driver.web;
 
 import Happlication.microserviceOpdracht.core.application.CommandHandler;
-import Happlication.microserviceOpdracht.core.application.dto.ProductData;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
 import Happlication.microserviceOpdracht.core.domain.Order;
+import Happlication.microserviceOpdracht.core.domain.Product;
 import Happlication.microserviceOpdracht.core.domain.Review;
 import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
 import Happlication.microserviceOpdracht.infrastructure.driver.web.request.ProductRequest;
@@ -42,7 +42,7 @@ public class GuestController {
     }
 
     @GetMapping("/menu")
-    public List<ProductData> getAllProducts() {
+    public List<Product> getAllProducts() {
         return this.commandHandler.getAllProducts();
     }
 }
