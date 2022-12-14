@@ -1,14 +1,12 @@
 package KitchenSystem.MicroService.application;
 
+import KitchenSystem.MicroService.application.dto.OrderData;
 import KitchenSystem.MicroService.application.port.IngredientRepository;
 import KitchenSystem.MicroService.application.port.OrderRepository;
 import KitchenSystem.MicroService.application.port.ProductRepository;
 import KitchenSystem.MicroService.application.port.TableRepository;
 import KitchenSystem.MicroService.command.*;
-import KitchenSystem.MicroService.domain.Amount;
-import KitchenSystem.MicroService.domain.Ingredient;
-import KitchenSystem.MicroService.domain.Order;
-import KitchenSystem.MicroService.domain.Product;
+import KitchenSystem.MicroService.domain.*;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.GenericEvent;
 import KitchenSystem.MicroService.infrastructure.driven.messaging.Producer;
 import KitchenSystem.MicroService.infrastructure.driver.request.ClaimOrderRequest;
@@ -125,6 +123,25 @@ public class CommandHandler {
         System.out.println("Ingredient: " + ingredient.getName());
         System.out.println("Amount: " + ingredient.getEnumAmount());
         ingredientRepository.save(ingredient);
+    }
+
+    public List<OrderData> getAllDoneOrders() {
+        List<OrderData> doneOrders = new ArrayList<>();
+        for (Order order : orderRepository.findAll()) {
+            if (order.getStatus() == Status.DONE){
+                doneOrders.add(createOrderData(order));
+            }
+        }
+        System.out.println("Er zijn " + doneOrders.size() + " aantal orders die done zijn");
+        return doneOrders;
+    }
+
+    public OrderData createOrderData(Order order) {
+        return new OrderData(
+                order.getOrderId(),
+                order.getTableNumber(),
+                order.getStatus()
+        );
     }
 
 }

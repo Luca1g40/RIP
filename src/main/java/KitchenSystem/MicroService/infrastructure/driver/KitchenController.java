@@ -1,9 +1,12 @@
 package KitchenSystem.MicroService.infrastructure.driver;
 
 import KitchenSystem.MicroService.application.CommandHandler;
+import KitchenSystem.MicroService.application.dto.OrderData;
 import KitchenSystem.MicroService.infrastructure.driver.request.ClaimOrderRequest;
 import KitchenSystem.MicroService.infrastructure.driver.request.OrderDoneRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/kitchen")
@@ -25,6 +28,10 @@ public class KitchenController {
         this.commandHandler.handle(new OrderDoneRequest(id));
     }
 
+    @GetMapping("/allorders")
+    public List<OrderData> allOrders(){
+        return this.commandHandler.getAllDoneOrders();
+    }
 
 
 }
