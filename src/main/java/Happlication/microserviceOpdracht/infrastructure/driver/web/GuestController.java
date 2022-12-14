@@ -38,5 +38,4 @@ public class GuestController {
     public List<ProductData> getAllProducts() {
         return this.commandHandler.getAllProducts();
     }
-
 }
