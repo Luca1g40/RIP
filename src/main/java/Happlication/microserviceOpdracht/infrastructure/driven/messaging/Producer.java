@@ -8,13 +8,12 @@ public class Producer{
 
     private RabbitTemplate template;
 
-    public Producer(RabbitTemplate template){
+        public Producer(RabbitTemplate template){
         this.template = template;
     }
 
     public void sendOrderToKitchen(GenericEvent m){
         this.template.convertAndSend("order-exchange", "", m);
     }
-
 
 }

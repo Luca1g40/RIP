@@ -35,3 +35,16 @@ services:
     volumes:
       - "./data:/var/data/db"
 
+  waiterdatabase:
+    build: development/db
+    ports:
+      - "55432:5432"
+    environment:
+      - POSTGRES_USER=waiter-db
+      - POSTGRES_PASSWORD=waiter-db
+      - DB_APP_NAME=waiter-db
+      - DB_APP_USER=waiter-db
+      - DB_APP_PASS=waiter-db
+    volumes:
+      - "./data:/var/data/db"
+

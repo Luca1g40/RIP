@@ -1,5 +1,6 @@
 package Happlication.microserviceOpdracht.core.application;
 
+import Happlication.microserviceOpdracht.core.application.port.AreaRepository;
 import Happlication.microserviceOpdracht.core.application.port.OrderRepository;
 import Happlication.microserviceOpdracht.core.application.port.ProductRepository;
 import Happlication.microserviceOpdracht.core.application.port.TableRepository;
@@ -7,6 +8,7 @@ import Happlication.microserviceOpdracht.core.command.AddToShoppingCart;
 import Happlication.microserviceOpdracht.core.command.PlaceNewProduct;
 import Happlication.microserviceOpdracht.core.command.OrderClaimed;
 import Happlication.microserviceOpdracht.core.command.OrderDone;
+import Happlication.microserviceOpdracht.core.domain.Area;
 import Happlication.microserviceOpdracht.core.domain.Order;
 import Happlication.microserviceOpdracht.core.domain.Product;
 import Happlication.microserviceOpdracht.core.domain.Table;
@@ -15,6 +17,7 @@ import Happlication.microserviceOpdracht.infrastructure.driven.messaging.Produce
 import Happlication.microserviceOpdracht.core.domain.event.OrderCreatedEvent;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -25,12 +28,14 @@ public class CommandHandler {
     private final OrderRepository orderRepository;
     private final TableRepository tableRepository;
     private final ProductRepository productRepository;
+    private final AreaRepository areaRepository;
 
-    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository, ProductRepository productRepository) {
+    public CommandHandler(Producer producer, OrderRepository orderRepository, TableRepository tableRepository, ProductRepository productRepository, AreaRepository areaRepository) {
         this.producer = producer;
         this.orderRepository = orderRepository;
         this.tableRepository = tableRepository;
         this.productRepository = productRepository;
+        this.areaRepository = areaRepository;
     }
 
     public Order handle(OrderCreatedEvent event) {
@@ -58,7 +63,9 @@ public class CommandHandler {
 
     public Table handle(AddToShoppingCart command){
         Table table = tableRepository.getById(command.getTableId());
-        table.addToShoppingCart(command.getProduct());
+        if(productRepository.existsByProductName(command.getProduct())){
+            table.addToShoppingCart(command.getProduct());
+        }
         tableRepository.save(table);
         return table;
     }
@@ -70,4 +77,15 @@ public class CommandHandler {
     }
 
 
+    public List<Long> handle(int tableNumber) {
+        List<Area> areas = areaRepository.findAll();
+        for (Area area : areas){
+            for (Table table : area.getTables()){
+                if (table.getTableNumber() == tableNumber){
+                    return area.getWaiterIds();
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -8,6 +8,8 @@ import Happlication.microserviceOpdracht.infrastructure.driver.messaging.event.G
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class Consumer {
 
@@ -18,7 +20,8 @@ public class Consumer {
     }
 
     @RabbitListener(queues = { "order-queue" })
-    public void consumeTest(GenericEvent event){
+    public void consumeTest(GenericEvent event) throws IOException {
+
         switch (event.eventKey) {
             case "claimOrder" -> this.commandHandler.handle(new OrderClaimed(event.id));
             case "orderDone" -> this.commandHandler.handle(new OrderDone(event.id));
@@ -27,7 +30,6 @@ public class Consumer {
 
     @RabbitListener(queues = { "product-queue" })
     public void consumeProduct(PlaceNewProduct placeNewProduct){
-        System.out.println(placeNewProduct.productName);
         this.commandHandler.handle(new PlaceNewProduct(placeNewProduct.id, placeNewProduct.productName, placeNewProduct.productDetails, placeNewProduct.category, true, placeNewProduct.prijs));
     }
 
