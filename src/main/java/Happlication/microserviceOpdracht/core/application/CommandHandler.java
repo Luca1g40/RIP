@@ -100,6 +100,12 @@ public class CommandHandler {
         tableRepository.save(table);
     }
 
+    public void handle(Long id) {
+        Product product = productRepository.getById(id);
+        product.setInStock(false);
+        productRepository.save(product);
+    }
+
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         for (Product product : productRepository.findAll()) {

@@ -45,4 +45,9 @@ public class GuestController {
     public List<Product> getAllProducts() {
         return this.commandHandler.getAllProducts();
     }
+
+    @PutMapping("/update/product/{id}")
+    public void updateProductStock(@PathVariable Long id){
+        this.commandHandler.handle(id);
+    }
 }

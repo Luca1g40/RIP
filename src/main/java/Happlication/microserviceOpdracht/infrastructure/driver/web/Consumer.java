@@ -36,6 +36,7 @@ public class Consumer {
 
     @RabbitListener(queues = { "productoutofstock-guest" })
     public void productOutOfStock(String message){
+        System.out.println("aangekomen");
         System.out.println(message);
     }
 
